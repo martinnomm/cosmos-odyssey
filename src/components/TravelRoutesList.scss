@@ -1,0 +1,16 @@
+.travel-routes-list {
+  position: relative;
+  top: 50%;
+  width: 40%;
+  margin: auto;
+  background-color: rgba(1,66,83,255);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.travel-list-header {
+  background-color: rgba(255,66,83,255);
+  width: 100%;
+}
