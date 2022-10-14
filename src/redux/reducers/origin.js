@@ -1,9 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 export const originSlice = createSlice({
     name: 'origin',
     initialState: {
-        origin: ''
+        origin: '',
     },
     reducers: {
         changeOrigin: (state, action) => {

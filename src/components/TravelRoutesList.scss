@@ -8,6 +8,8 @@
   border-radius: 0.5rem;
   display: flex;
   flex-direction: column;
+  overflow-y: scroll;
+  height: 75vh;
 }
 
 .travel-list-header {
