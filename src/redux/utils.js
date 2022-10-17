@@ -19,18 +19,15 @@ const routes = [
 
 function findPaths(origin, destination) {
     let paths = [[destination]]
-    let pathsNext = []
-    let target = ''
-    let sources = []
     while (!paths.every( path => path[path.length-1] === origin )) {
-        pathsNext = []
+        let pathsNext = []
         paths.forEach( path => {
             if (path[path.length-1] === origin) {
                 pathsNext.push(path)
             } else {
 
-                target = path[path.length-1]
-                sources = routes.filter( route => route[1] === target).map( route => route[0])
+                let target = path[path.length-1]
+                let sources = routes.filter( route => route[1] === target).map( route => route[0])
                 sources.forEach( source => {
                     if (!path.includes(source)) {
                         pathsNext.push([...path, source])
@@ -45,10 +42,40 @@ function findPaths(origin, destination) {
     return pathReversed
 }
 
-function checkForValidRoutes(path ) {
-    
+function checkForValidRoutes(path, routeList) {
+    const cleanedRoutes = []
+    const foundRoutes = recursiveValidRoutes(path, routeList)
+    recursiveCleanRouteArray(foundRoutes, cleanedRoutes)
+    return cleanedRoutes
 }
 
+function recursiveValidRoutes(pathRef, routeList, currentPlanetIDX = 0, currentRoutes = [], previousFlightEnd = 0) { // TODO: Change previousFlightEnd to Date now
+    // If arrived on planet, got a valid route
+    if (currentPlanetIDX === pathRef.length-1) return { routes:currentRoutes }
+
+    // Check for valid routes out of current planet
+    const from = pathRef[currentPlanetIDX]
+    const to = pathRef[currentPlanetIDX+1]
+    const leg = routeList.legs.find( leg => leg.routeInfo.from.name === from && leg.routeInfo.to.name === to)
+    const nextRoutes = []
+    for (let i = 0; i < leg.providers.length; i++) {
+        // TODO: Add filter for companies here
+        const provider = leg.providers[i]
+        const flightStart = new Date(provider.flightStart).getTime()
+        if (previousFlightEnd > flightStart) continue
+        nextRoutes.push({legID: leg.id, providerID: provider.id, flightEnd: new Date(provider.flightEnd).getTime()})
+    }
+    const foundRoutes = nextRoutes.map( route => recursiveValidRoutes(pathRef, routeList, currentPlanetIDX+1, [...currentRoutes, {legID: route.legID, providerID: route.providerID}], route.flightEnd))
+    return foundRoutes
+} 
+
+function recursiveCleanRouteArray(currentNode, cleanedRoutes) {
+    if (Array.isArray(currentNode)) {
+        currentNode.forEach( node => recursiveCleanRouteArray(node, cleanedRoutes))
+    } else {
+        cleanedRoutes.push(currentNode)
+    }
+}
 /**
  * Checks if input date-time is less than current date-time
  */

@@ -8,11 +8,11 @@ export default function TravelRoutesList(props) {
   const sel = useSelector(selectRoutes)
   return (
     <div className='travel-routes-list'>
-      hmm: {sel}
+      hmm: {JSON.stringify(sel)}
       <div className='travel-list-header'/>
       {
-        props.travelRoutes.map( (travelRoute) => {
-          return <TravelRoute travelRoute={travelRoute} key={travelRoute.id}/>
+        sel.map( (travelRoute, idx) => {
+          return <TravelRoute travelRoute={travelRoute} key={idx}/>
         })
       }
       <div className='travel-list-footer'/>

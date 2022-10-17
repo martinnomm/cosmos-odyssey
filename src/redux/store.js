@@ -5,7 +5,7 @@ import storage from 'redux-persist/lib/storage'
 
 const persistConfig = {
     key: 'cosmos-persist-key',
-    blacklist: ['origin', 'destination'],
+    blacklist: ['origin', 'destination', 'loading'],
     storage
 }
 
