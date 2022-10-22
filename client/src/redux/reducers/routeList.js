@@ -21,7 +21,6 @@ export const routeListSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(fetchRoutes.pending, state => {state.loading = true})
         builder.addCase(fetchRoutes.fulfilled, (state, action) => {
-            console.log(action.payload)
             state.loading = false
             state.currentRouteID = action.payload.id
             state.routeList.push(action.payload)
@@ -43,10 +42,12 @@ export const routeListSlice = createSlice({
 //         return response
 // })
 const fetchRoutes = createAsyncThunk('routeList/fetchRoutes', 
-    async () => {
-        const response = await fetchNewRouteList()
-        return response
-})
+    async () => fetch('http://localhost:3001/api/test').then(res => res.json())
+//     {
+//         const response = await fetchNewRouteList()
+//         return response
+// }
+)
 export const { changeCurrentRoute, addRoute } = routeListSlice.actions
 export { fetchRoutes }
 export default routeListSlice.reducer

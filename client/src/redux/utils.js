@@ -85,9 +85,10 @@ const isDateValid = (validUntil) => {
 
 // TODO: Create API Call for actual resource
 const fetchNewRouteList = () => {
-    return new Promise((resolve) => {
-        resolve(testingData);
-    })
+    return fetch('http://localhost:3001/api/test')
+    // return new Promise((resolve) => {
+    //     resolve(testingData);
+    // })
 }
 export { findPaths, isDateValid, fetchNewRouteList, checkForValidRoutes }
 

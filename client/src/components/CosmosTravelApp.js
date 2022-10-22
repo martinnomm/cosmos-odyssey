@@ -16,18 +16,18 @@ export default function CosmosTravelApp() {
   const validUntil = useSelector(selectValidUntil)
   const loading = useSelector(selectLoading)
 
-  // const dispatch = useDispatch()
-  // useEffect(() => {
+  const dispatch = useDispatch()
+  useEffect(() => {
 
-  //   dispatch(fetchRoutes())
-  // })
+    dispatch(fetchRoutes())
+  },[])
   // useEffect(() => {
   //   if (loading) return
   //   if (!validUntil) {
   //     dispatch(fetchRoutes())
   //     console.log(validUntil)
   //   }
-  // })
+  // }, [])
   const travelRoutes = myData.paths
   return (
     <>
