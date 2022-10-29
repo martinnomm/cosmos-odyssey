@@ -1,39 +1,34 @@
 import React, { useEffect } from 'react'
 import './CosmosTravelApp.scss'
-import TravelRoutesList from './TravelRoutesList.js'
+import ProvidedRoutesList from './ProvidedRoutesList.js'
 import OriginDestinationSelector from './OriginDestinationSelector.js'
-import myData from '../assets/testingPaths.json'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectValidUntil, selectLoading } from '../redux/reducers'
-import { fetchRoutes } from '../redux/reducers/routeList'
+import { selectLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
+import { fetchRoutes } from '../redux/reducers/providedRoutes'
 
 export default function CosmosTravelApp() {
 
+  const planets = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
   // Check validuntil
   // If no currentid or not valid, dispatch api loading
   // if validuntil is fine, useEffect and set up timeout for loading new data
 
-  const validUntil = useSelector(selectValidUntil)
   const loading = useSelector(selectLoading)
-
+  const origin = useSelector(selectOrigin)
+  const destination = useSelector(selectDestination)
+  const providedRoutes = useSelector(selectProvidedRoutes)
   const dispatch = useDispatch()
   useEffect(() => {
-
-    dispatch(fetchRoutes())
-  },[])
-  // useEffect(() => {
-  //   if (loading) return
-  //   if (!validUntil) {
-  //     dispatch(fetchRoutes())
-  //     console.log(validUntil)
-  //   }
-  // }, [])
-  const travelRoutes = myData.paths
+    if (loading) return
+    if (planets.includes(origin) && planets.includes(destination)){
+      dispatch(fetchRoutes({origin, destination}))
+    }
+      // TODO: Set timeout for loading new data
+  },[origin,destination])
   return (
     <>
-      goo: {validUntil}
       <OriginDestinationSelector />
-      <TravelRoutesList travelRoutes={travelRoutes} />
+      <ProvidedRoutesList loading={loading} providedRoutes={providedRoutes} />
     </>
   )
 }
