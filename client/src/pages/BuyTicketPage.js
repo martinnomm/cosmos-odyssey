@@ -3,7 +3,7 @@ import './BuyTicketPage.scss'
 import ProvidedRoutesList from '../components/ProvidedRoutesList.js'
 import OriginDestinationSelector from '../components/OriginDestinationSelector.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
+import { selectRoutesLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
 import { fetchRoutes } from '../redux/reducers/providedRoutes'
 
 export default function BuyTicketPage() {
@@ -13,12 +13,11 @@ export default function BuyTicketPage() {
   // If no currentid or not valid, dispatch api loading
   // if validuntil is fine, useEffect and set up timeout for loading new data
 
-  const loading = useSelector(selectLoading)
+  const loading = useSelector(selectRoutesLoading)
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
   const providedRoutes = useSelector(selectProvidedRoutes)
   const dispatch = useDispatch()
-  // TODO: select providedroute and let add first and last name and make reservation
   
   useEffect(() => {
     if (loading) return

@@ -8,12 +8,11 @@ export default function ProvidedRoutesList(props) {
     <div className='provided-routes-container'>
       <div className='provided-routes-list'>
         <div className='provided-list-header'/>
-        { // TODO: Create proper loading
+        {
             props.providedRoutes || props.loading ? props.providedRoutes.map( (providedRoute, idx) => { return <ProvidedRoutesDisplay  route={providedRoute} key={idx}/> })  : '<div>loading</div>' 
         }
         <div className='provided-list-footer'/>
       </div>
-      { props.loading && <div className='overlay'/> }
     </div>
   )
 }

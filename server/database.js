@@ -40,24 +40,26 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         )`
       )
 
-      // TODO: Finish reservation
-      // db.run(
-      //   `CREATE TABLE IF NOT EXISTS reservation (
-      //     id INTEGER PRIMARY KEY AUTOINCREMENT,
-      //     routelist_id TEXT,
-      //     first_name TEXT,
-      //     last_name TEXT,
-      //     routes_id TEXT,
-      //     total_price REAL,
-      //     total_travel_time REAL,
-      //     companies_id TEXT,
-      //     FOREIGN KEY (routelist_id) REFERENCES routelist(id) ON DELETE CASCADE
-      //   )`
-      // )
-      // var insert = 'INSERT INTO routelist (id, valid_until) VALUES (?,?)'
-      // db.run(insert, ["timedate","time('now')"])
-      // db.run(insert, ["old","2022-10-04T19:21:31.3425522Z"])
-      // db.run("DELETE FROM routelist WHERE id = '872f29e7-5ffc-4d56-9cf7-c45176bb045e'")
+      db.run(
+        `CREATE TABLE IF NOT EXISTS reservation (
+          id TEXT PRIMARY KEY,
+          routelist_id TEXT,
+          first_name TEXT,
+          last_name TEXT,
+          total_price REAL,
+          total_travel_time REAL,
+          FOREIGN KEY (routelist_id) REFERENCES routelist(id) ON DELETE CASCADE
+        )`
+      )
+
+      db.run(
+        `CREATE TABLE IF NOT EXISTS reservation_provider(
+          id TEXT PRIMARY KEY,
+          reservation_id TEXT,
+          provider_id TEXT,
+          FOREIGN KEY (reservation_id) REFERENCES reservation(id) ON DELETE CASCADE
+        )`
+      )
   }
 });
 

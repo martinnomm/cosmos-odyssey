@@ -1,33 +1,31 @@
-import React, { useEffect } from 'react'
-import './BuyTicketPage.scss'
-import ProvidedRoutesList from '../components/ProvidedRoutesList.js'
-import OriginDestinationSelector from '../components/OriginDestinationSelector.js'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
-import { fetchRoutes } from '../redux/reducers/providedRoutes'
+import InputName from '../components/InputName'
+import ReservationsList from '../components/ReservationsList'
+import { selectReservations, selectReservationsLoading } from '../redux/reducers'
+import { fetchReservations } from '../redux/reducers/reservations'
+import './CheckTicketPage.scss'
 
 export default function CheckTicketPage() {
 
-  const planets = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
-  // Check validuntil
-  // If no currentid or not valid, dispatch api loading
-  // if validuntil is fine, useEffect and set up timeout for loading new data
-
-  const loading = useSelector(selectLoading)
-  const origin = useSelector(selectOrigin)
-  const destination = useSelector(selectDestination)
-  const providedRoutes = useSelector(selectProvidedRoutes)
   const dispatch = useDispatch()
-  
-  useEffect(() => {
+  const reservations = useSelector(selectReservations)
+  const loading = useSelector(selectReservationsLoading)
+
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('') 
+
+  const handleSubmit = () => {
     if (loading) return
-    if (planets.includes(origin) && planets.includes(destination)){
-      dispatch(fetchRoutes({origin, destination}))
+    if (firstName && lastName && firstName.length > 0 && lastName.length > 0) {
+      dispatch(fetchReservations({firstName, lastName}))
     }
-  },[origin,destination])
+  }
+
   return (
     <>
-      <ProvidedRoutesList loading={loading} providedRoutes={providedRoutes} />
+      <InputName className="select-container" buttonName={"Check for tickets"} onSubmit={handleSubmit} firstName={firstName} setFirstName={setFirstName} lastName={lastName} setLastName={setLastName}/>
+      <ReservationsList loading={loading} reservations={reservations} />
     </>
   )
 }

@@ -1,10 +1,15 @@
 const express = require('express')
+const bodyParser = require("body-parser");
 const cors = require("cors")
 var db = require("./database.js")
 const unirest = require("unirest")
-
+const { v4: uuidv4 } = require('uuid')
 const port = 3001;
 const app = express();
+
+//Here we are configuring express to use body-parser as middle-ware.
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 app.use(cors())
  // TODO: All API should respond with validuntil if it's current
 const routes = [
@@ -148,7 +153,7 @@ function processRoutesFromProviderIDSForDisplay(validRoutes, allLegs, allProvide
       routeEnd: routeProviders[routeProviders.length-1].flight_end,
       path: [routeLegs[0].from_planet, ...routeLegs.map(leg => leg.to_planet)], // ,...route.routes.map( planetRoute => currentRouteList.legs.find(leg => leg.id === planetRoute.legID).routeInfo.to.name)],
       companies: routeProviders.map(provider => provider.company), // companies: route.routes.map( planetRoute =>  currentRouteList.legs.find(leg => leg.id === planetRoute.legID).providers.find( provider => provider.id === planetRoute.providerID).company.name),
-      // totalTravelTime: 0, TODO: Calculate travel time
+      totalTravelTime: new Date(routeProviders[routeProviders.length-1].flight_end).getTime() - new Date(routeProviders[0].flight_start).getTime(), 
       totalPrice: routeProviders.map(provider => provider.price).reduce((partialSum, a) => partialSum + a, 0),
       totalDistance: routeLegs.map(leg => leg.distance).reduce((partialSum, a) => partialSum + a, 0),
     }
@@ -158,6 +163,14 @@ function processRoutesFromProviderIDSForDisplay(validRoutes, allLegs, allProvide
 async function db_all(query){
   return new Promise(function(resolve,reject){
       db.all(query, function(err,rows){
+         if(err){return reject(err);}
+         resolve(rows);
+       });
+  });
+}
+async function db_run(query, params){
+  return new Promise(function(resolve,reject){
+      db.run(query, params, function(err,rows){
          if(err){return reject(err);}
          resolve(rows);
        });
@@ -207,7 +220,7 @@ app.get("/api/provided-routes/", (req, res) => {
       .catch(err => res.status(400).json({"error": err}))
     })
     .catch(err => res.status(400).json({"error":err}))
-    }
+  }
 })
 app.get("/api/legs", (req, res) => {
   const sql = "SELECT * from leg"
@@ -237,8 +250,121 @@ app.get("/api/providers", (req, res) => {
     })
   })
 })
+app.post("/api/reservation", (req, res) => {
+  const firstName = req.body.firstName
+  const lastName = req.body.lastName
 
+  if(!firstName || !typeof firstName === 'string' || !firstName instanceof String || !lastName || !typeof lastName === 'string' || !lastName instanceof String) {
+    res.status(400).json({"error": `${!firstName || !typeof firstName === 'string' || !firstName instanceof String ? 'firstName invalid' : ''} ${!lastName || !typeof lastName === 'string' || !lastName instanceof String ? 'lastName invalid' : ''}`})
+  } else {
+    db_all(`SELECT (leg_id) FROM provider WHERE id = '${req.body.reservedRoute.routeProviders[0]}'`)
+    .then((leg_id_row) => {
+      const leg_id = leg_id_row[0].leg_id
+      db_all(`SELECT (routelist_id) FROM leg WHERE id = '${leg_id}'`)
+      .then((routelist_id_row)=> {
+        if (routelist_id_row.length === 0) res.status(400).json({"error": "No routes found"})
+        else {
+          const reservation_id = uuidv4()
+          const routelist_id = routelist_id_row[0].routelist_id
+          const first_name = req.body.firstName
+          const last_name = req.body.lastName
+          const total_price = req.body.reservedRoute.totalPrice
+          const total_travel_time = req.body.reservedRoute.totalTravelTime
+          db_run(`INSERT INTO reservation(id, routelist_id, first_name, last_name, total_price, total_travel_time) VALUES (?, ?, ?, ?, ?, ?)`, [ reservation_id, routelist_id, first_name, last_name, total_price, total_travel_time])
+          .then(() => {
+            const providers = req.body.reservedRoute.routeProviders
+            const providersTemplate = providers.map(()=> '(?, ?, ?)').join(', ')
+            const providerValues = providers.map((provider_id) => [ uuidv4(), reservation_id, provider_id]).flat()
+            db_run(`INSERT INTO reservation_provider(id, reservation_id, provider_id) VALUES ${providersTemplate} `, providerValues)
+            .then(() => {
+              res.json({message:"success"})
+            })
+            .catch((err)=>res.status(400).json({"error": err}))
+          })
+          .catch((err)=>res.status(400).json({"error": err}))
+        }
+      })
+      .catch((err)=>res.status(400).json({"error": err}))
+    })
+    .catch((err)=>res.status(400).json({"error": err}))
+  }
+})
+app.get('/api/reservation/', (req,res)=>{
+  const firstName = req.query.firstname
+  const lastName = req.query.lastname
 
+  if (!firstName || !lastName) {
+    res.status(400).json({"error": `${!firstName ? "first name missing" : ""} ${!lastName ? "last name missing" : ""}`})
+  } else {
+    db_all(`SELECT * FROM reservation WHERE first_name = '${firstName}' AND last_name = '${lastName}'`)
+    .then((reservationRows)=> {
+      const reservation_ids_condition = reservationRows.map( reservation => `reservation_id = '${reservation.id}'`).join(' OR ')
+      db_all(`SELECT * FROM reservation_provider WHERE ${reservation_ids_condition}`)
+      .then((reservation_provider_rows) => {
+        const provider_condition = reservation_provider_rows.map( row => `id = '${row.provider_id}'`).join(' OR ')
+        db_all(`SELECT * FROM provider WHERE ${provider_condition}`)
+        .then((provider_rows) => {
+          console.log('yes')
+          const data = reservationRows.map( reservation => {  // TODO: FIX reservation information
+            return {
+              firstName,
+              lastName,
+              path: [],
+              totalPrice: 0,
+              totalTravelTime: 123,
+              companies: [],
+              providers: [],
+            }
+          })
+          res.json({"message":"success", data:data})
+        })
+        .catch(()=>res.status(400).json({"error":"Server error"}))
+      })
+      .catch(()=>res.status(400).json({"error":"Server error"}))
+    })
+    .catch(()=> res.status(400).json({"error":"Server error"}))
+    // isRoutelistValid()
+    // .then((routeList) => {
+    //   const routeListID = routeList.id
+      
+    //   db_all(`SELECT * FROM leg WHERE routelist_id = '${routeListID}'`)
+    //   .then((routeListLegs) => {
+    //     const providerQuery = routeListLegs.map( leg => `leg_id = '${leg.id}'`).join(' OR ')
+    //     db_all(`SELECT * FROM provider WHERE ${providerQuery}`)
+    //     .then((routeListProviders) => {
+    //       const possiblePaths = findPaths(fromPlanet, toPlanet)
+    //       let validRoutes = []
+    //       possiblePaths.forEach( 
+    //         path => 
+    //         validRoutes = [...validRoutes, ...checkForValidRoutes(path, routeListLegs, routeListProviders)]
+    //       )
+    //       const processedRoutes =  processRoutesFromProviderIDSForDisplay(validRoutes, routeListLegs, routeListProviders)
+          
+    //       res.json({"message": "success", "data": processedRoutes })
+    //     })
+    //     .catch(err => res.status(400).json({"error": err}))
+    //   })
+    //   .catch(err => res.status(400).json({"error": err}))
+    // })
+    // .catch(err => res.status(400).json({"error":err}))
+  }
+})
+// function processRoutesFromProviderIDSForDisplay(validRoutes, allLegs, allProviders) {
+//   return validRoutes.map(route => {
+//     const routeProviders = route.providers.map(providerID => allProviders.find(allProvider => allProvider.id === providerID))
+//     const routeLegs = routeProviders.map(provider => allLegs.find(leg => leg.id === provider.leg_id))
+//     return {
+//       routeProviders: route.providers,
+//       routeStart: routeProviders[0].flight_start,
+//       routeEnd: routeProviders[routeProviders.length-1].flight_end,
+//       path: [routeLegs[0].from_planet, ...routeLegs.map(leg => leg.to_planet)], // ,...route.routes.map( planetRoute => currentRouteList.legs.find(leg => leg.id === planetRoute.legID).routeInfo.to.name)],
+//       companies: routeProviders.map(provider => provider.company), // companies: route.routes.map( planetRoute =>  currentRouteList.legs.find(leg => leg.id === planetRoute.legID).providers.find( provider => provider.id === planetRoute.providerID).company.name),
+//       totalTravelTime: new Date(routeProviders[routeProviders.length-1].flight_end).getTime() - new Date(routeProviders[0].flight_start).getTime(), 
+//       totalPrice: routeProviders.map(provider => provider.price).reduce((partialSum, a) => partialSum + a, 0),
+//       totalDistance: routeLegs.map(leg => leg.distance).reduce((partialSum, a) => partialSum + a, 0),
+//     }
+//   })
+// }
 app.use(function(req, res){
   res.status(404);
 });
