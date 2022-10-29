@@ -13,6 +13,7 @@ export default combineReducers({ providedRoutes, origin, destination, selectedRo
 // Export select commands for the reducers
  
 const selectRoutesLoading = state => state.providedRoutes.loading
+const selectValidUntil = state => state.providedRoutes.validUntil
 const selectReservationsLoading = state => state.reservations.loading
 const selectOrigin = state => state.origin.origin
 const selectDestination = state => state.destination.destination
@@ -21,4 +22,4 @@ const selectReservations = state => state.reservations.reservations
 const selectSelectedRoute = state => state.selectedRoute.routeInfo
 const selectShowLoaderOverlay = state => state.providedRoutes.loading || state.reservations.loading || state.showLoaderOverlay.showLoaderOverlay
 
-export { selectRoutesLoading, selectOrigin, selectDestination, selectProvidedRoutes, selectSelectedRoute, selectShowLoaderOverlay, selectReservationsLoading, selectReservations }
+export { selectRoutesLoading, selectValidUntil, selectOrigin, selectDestination, selectProvidedRoutes, selectSelectedRoute, selectShowLoaderOverlay, selectReservationsLoading, selectReservations }

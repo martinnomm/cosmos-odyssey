@@ -123,7 +123,7 @@ function isRoutelistValid() {
                                 if (err7) reject({valid: false, error: err7})
                                 else {
                                   // TODO: Check if there are 15 routes, remove if there are
-                                  resolve({"message": "success", valid: true, id: routeList.id, validUntil: routeList.validUntil})
+                                  resolve({"message": "success", valid: true, id: routeList.id, validUntil: new Date(routeList.validUntil).getTime()})
                                 }
                               })
                             }
@@ -179,19 +179,24 @@ async function db_run(query, params){
 app.get("/api/routelist", async (req, res) => {
   isRoutelistValid()
   .then((routeList)=> {
-    res.json({"message": "success", "data": routeList})
+    res.json({"message": "success", validUntil: routeList.validUntil, "data": routeList})
   })
   .catch(err => res.status(400).json({"error": err}))
 })
 
 app.get("/api/provided-routes/", (req, res) => {
-  const fromPlanet = req.query.fromplanet.length > 1 ? `${req.query.fromplanet.charAt(0).toUpperCase()}${req.query.fromplanet.slice(1)}` : req.query.fromplanet
-  const toPlanet = req.query.toplanet.length > 1 ? `${req.query.toplanet.charAt(0).toUpperCase()}${req.query.toplanet.slice(1)}` : req.query.toplanet
+  const fromPlanet = req?.query?.fromplanet?.length > 1 ? `${req?.query?.fromplanet?.charAt(0)?.toUpperCase()}${req?.query?.fromplanet?.slice(1)}` : req?.query?.fromplanet
+  const toPlanet = req?.query?.toplanet?.length > 1 ? `${req?.query?.toplanet?.charAt(0)?.toUpperCase()}${req?.query?.toplanet?.slice(1)}` : req?.query?.toplanet
 
   const planetNames = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
-  if (!fromPlanet && !toPlanet) res.status(400).json({"error": `Missing query fromPlanet and toPlanet`})
-  else if (!fromPlanet) res.status(400).json({"error": `Missing query fromPlanet`})
-  else if (!toPlanet) res.status(400).json({"error": `Missing query toPlanet`})
+  if (!fromPlanet && !toPlanet) {
+    isRoutelistValid()
+    .then((routeList)=> {
+
+      res.json({"message": `Missing query fromPlanet and toPlanet, updated routelists`, validUntil: routeList.validUntil, data:[]})
+    })
+    .catch((err)=> res.status(400).json({"error": err}))
+  }
   else if (!planetNames.includes(fromPlanet) || !planetNames.includes(toPlanet)) res.status(400).json({"error": "query must be planet names, got " +fromPlanet + " & " + toPlanet})
   else if (fromPlanet.toLowerCase() === toPlanet.toLowerCase()) res.status(400).json({"error": "planet names must be different"})
   else {
@@ -213,7 +218,7 @@ app.get("/api/provided-routes/", (req, res) => {
           )
           const processedRoutes =  processRoutesFromProviderIDSForDisplay(validRoutes, routeListLegs, routeListProviders)
           
-          res.json({"message": "success", "data": processedRoutes })
+          res.json({"message": "success", validUntil: routeList.validUntil, "data": processedRoutes })
         })
         .catch(err => res.status(400).json({"error": err}))
       })

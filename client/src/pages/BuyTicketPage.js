@@ -3,7 +3,7 @@ import './BuyTicketPage.scss'
 import ProvidedRoutesList from '../components/ProvidedRoutesList.js'
 import OriginDestinationSelector from '../components/OriginDestinationSelector.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectRoutesLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
+import { selectRoutesLoading, selectOrigin, selectDestination, selectProvidedRoutes, selectValidUntil } from '../redux/reducers'
 import { fetchRoutes } from '../redux/reducers/providedRoutes'
 
 export default function BuyTicketPage() {
@@ -17,15 +17,28 @@ export default function BuyTicketPage() {
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
   const providedRoutes = useSelector(selectProvidedRoutes)
+  const validUntil = useSelector(selectValidUntil)
   const dispatch = useDispatch()
-  
+
   useEffect(() => {
     if (loading) return
     if (planets.includes(origin) && planets.includes(destination)){
       dispatch(fetchRoutes({origin, destination}))
     }
-      // TODO: Set timeout for loading new data
   },[origin,destination])
+
+  useEffect(() => {
+    console.log(`Now: ${Date.now()}, valid: ${validUntil} ... ${validUntil-Date.now()}`)
+    const fetchTimeout = setTimeout(() => {
+      if (planets.includes(origin) && planets.includes(destination))
+        dispatch(fetchRoutes({origin, destination}))
+      else
+        dispatch(fetchRoutes())
+    }, validUntil - Date.now() > 0 ? validUntil - Date.now() + 50 : 50)
+    return () => {
+      clearTimeout(fetchTimeout)
+    }
+  })
   return (
     <>
       <OriginDestinationSelector />
