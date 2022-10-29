@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import './CosmosTravelApp.scss'
-import ProvidedRoutesList from './ProvidedRoutesList.js'
-import OriginDestinationSelector from './OriginDestinationSelector.js'
+import './BuyTicketPage.scss'
+import ProvidedRoutesList from '../components/ProvidedRoutesList.js'
+import OriginDestinationSelector from '../components/OriginDestinationSelector.js'
 import { useDispatch, useSelector } from 'react-redux'
 import { selectLoading, selectOrigin, selectDestination, selectProvidedRoutes } from '../redux/reducers'
 import { fetchRoutes } from '../redux/reducers/providedRoutes'
 
-export default function CosmosTravelApp() {
+export default function BuyTicketPage() {
 
   const planets = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
   // Check validuntil
@@ -18,6 +18,8 @@ export default function CosmosTravelApp() {
   const destination = useSelector(selectDestination)
   const providedRoutes = useSelector(selectProvidedRoutes)
   const dispatch = useDispatch()
+  // TODO: select providedroute and let add first and last name and make reservation
+  
   useEffect(() => {
     if (loading) return
     if (planets.includes(origin) && planets.includes(destination)){

@@ -13,7 +13,8 @@ export default function TravelRoute(props) {
   const dispatch = useDispatch()
   const handleOriginChange = (event) => { dispatch(changeOrigin(event.target.value)) } 
   const handleDestinationChange = (event) => { dispatch(changeDestination(event.target.value)) } 
-
+  // TODO: Add sorting
+  // TODO: Add filterin
   return (
     <div className='select-container'>
       <div>

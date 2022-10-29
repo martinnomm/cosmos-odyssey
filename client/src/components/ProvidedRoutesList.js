@@ -8,8 +8,8 @@ export default function ProvidedRoutesList(props) {
     <div className='provided-routes-container'>
       <div className='provided-routes-list'>
         <div className='provided-list-header'/>
-        { 
-            props.providedRoutes || props.loading ? props.providedRoutes.map( (providedRoute, idx) => { return <ProvidedRoutesDisplay route={providedRoute} key={idx}/> })  : '<div>loading</div>' // Create proper loading
+        { // TODO: Create proper loading
+            props.providedRoutes || props.loading ? props.providedRoutes.map( (providedRoute, idx) => { return <ProvidedRoutesDisplay  route={providedRoute} key={idx}/> })  : '<div>loading</div>' 
         }
         <div className='provided-list-footer'/>
       </div>

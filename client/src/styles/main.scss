@@ -37,3 +37,12 @@ body {
   z-index: 1;
   animation: move-twinkling-back 200s linear infinite;
 }
+
+.some-routing-template {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  justify-items: center;
+  color: red;
+  z-index: 4;
+}

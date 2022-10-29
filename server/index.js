@@ -143,11 +143,12 @@ function processRoutesFromProviderIDSForDisplay(validRoutes, allLegs, allProvide
     const routeProviders = route.providers.map(providerID => allProviders.find(allProvider => allProvider.id === providerID))
     const routeLegs = routeProviders.map(provider => allLegs.find(leg => leg.id === provider.leg_id))
     return {
+      routeProviders: route.providers,
       routeStart: routeProviders[0].flight_start,
       routeEnd: routeProviders[routeProviders.length-1].flight_end,
       path: [routeLegs[0].from_planet, ...routeLegs.map(leg => leg.to_planet)], // ,...route.routes.map( planetRoute => currentRouteList.legs.find(leg => leg.id === planetRoute.legID).routeInfo.to.name)],
       companies: routeProviders.map(provider => provider.company), // companies: route.routes.map( planetRoute =>  currentRouteList.legs.find(leg => leg.id === planetRoute.legID).providers.find( provider => provider.id === planetRoute.providerID).company.name),
-      // totalTravelTime: 0,
+      // totalTravelTime: 0, TODO: Calculate travel time
       totalPrice: routeProviders.map(provider => provider.price).reduce((partialSum, a) => partialSum + a, 0),
       totalDistance: routeLegs.map(leg => leg.distance).reduce((partialSum, a) => partialSum + a, 0),
     }
