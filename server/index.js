@@ -239,19 +239,32 @@ app.get("/api/legs", (req, res) => {
     })
   })
 })
-app.get("/api/providers", (req, res) => {
-  const sql = "SELECT * from provider"
-  const params = []
-  db.all(sql, params, (err, rows) => {
-    if (err) {
-      res.status(400).json({"error":err.message});
-      return;
-    }
-    res.json({
-        "message":"success",
-        "data":rows
+app.get("/api/provider", (req, res) => {
+  const provider_ids = req.query.providerids
+
+  const providerCondition = provider_ids.map(provider_id => `id = '${provider_id}'`).join(" OR ")
+  db_all(`SELECT * FROM provider WHERE ${providerCondition}`)
+  .then((providerRows)=> {
+    const legCondition = providerRows.map(provider => `id = '${provider.leg_id}'`).join(" OR ")
+    db_all(`SELECT * FROM leg WHERE ${legCondition}`)
+    .then((legRows)=> {
+      const data = provider_ids.map(provider_id => {
+        const providerInfo = providerRows.find(provider => provider.id === provider_id)
+        const legInfo = legRows.find(leg => leg.id === providerInfo.leg_id)
+        return {
+          from_planet: legInfo.from_planet,
+          to_planet: legInfo.to_planet,
+          price: providerInfo.price,
+          flightStart: new Date(providerInfo.flight_start).toString(),
+          flightEnd: new Date(providerInfo.flight_end).toString(),
+          company: providerInfo.company
+        }
+      })
+      res.json({"message": "success", data})
     })
+    .catch((err) => res.status(400).json({"error": err}))
   })
+  .catch((err) => res.status(400).json({"error": err}))
 })
 app.post("/api/reservation", (req, res) => {
   const firstName = req.body.firstName

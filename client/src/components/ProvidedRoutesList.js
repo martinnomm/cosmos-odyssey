@@ -34,13 +34,12 @@ export default function ProvidedRoutesList(props) {
       <div className='provided-routes-list'>
         <div className='provided-list-header'/>
         {
-          providedRoutes && providedRoutes?.length > 0 &&
+          providedRoutes && providedRoutes?.length > 0 ?
             [].concat(providedRoutes) // TODO: Move sorting / filtering to backend?
             .sort(getSortedFunc(sorting))
             .filter((providedRoute) => providedRoute.companies.every((company) => !filtering.map(filter => filter.value).includes(company)))
             .map((providedRoute, idx) => { return <ProvidedRoutesDisplay  route={providedRoute} key={idx}/> })
-        }
-        {
+            :
           <ProvidedRoutesDisplay/>
         }
         <div className='provided-list-footer'/>

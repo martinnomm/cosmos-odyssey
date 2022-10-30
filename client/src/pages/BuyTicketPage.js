@@ -5,6 +5,7 @@ import OriginDestinationSelector from '../components/OriginDestinationSelector.j
 import { useDispatch, useSelector } from 'react-redux'
 import { selectRoutesLoading, selectOrigin, selectDestination, selectValidUntil } from '../redux/reducers'
 import { fetchRoutes } from '../redux/reducers/providedRoutes'
+import { removeSelectedRoute, removeSelectedRouteProviders } from '../redux/reducers/selectedRoute'
 
 export default function BuyTicketPage() {
 
@@ -23,15 +24,18 @@ export default function BuyTicketPage() {
     if (loading) return
     if (planets.includes(origin) && planets.includes(destination)){
       dispatch(fetchRoutes({origin, destination}))
+      dispatch(removeSelectedRoute())
+      dispatch(removeSelectedRouteProviders())
     }
   },[origin,destination])
 
   useEffect(() => {
     const fetchTimeout = setTimeout(() => {
-      if (planets.includes(origin) && planets.includes(destination))
-        dispatch(fetchRoutes({origin, destination}))
-      else
-        dispatch(fetchRoutes())
+      if (planets.includes(origin) && planets.includes(destination)) dispatch(fetchRoutes({origin, destination}))
+      else dispatch(fetchRoutes())
+
+      dispatch(removeSelectedRoute())
+      dispatch(removeSelectedRouteProviders())
     }, validUntil - Date.now() > 0 ? validUntil - Date.now() + 50 : 50)
     return () => {
       clearTimeout(fetchTimeout)

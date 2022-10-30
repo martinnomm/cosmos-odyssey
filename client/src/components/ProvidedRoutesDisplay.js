@@ -1,13 +1,16 @@
 import React from 'react'
 import { useDispatch } from 'react-redux'
-import { changeSelectedRoute } from '../redux/reducers/selectedRoute'
+import { changeSelectedRoute, fetchSelectedRouteProviders } from '../redux/reducers/selectedRoute'
 import { convertTimeFromMSToText } from '../utils'
 import './ProvidedRoutesDisplay.scss'
 
 export default function ProvidedRoutesDisplay({ route }) {
   const dispatch = useDispatch()
   function handleClick() { 
-    if(route) dispatch(changeSelectedRoute(route))
+    if(route) {
+      dispatch(changeSelectedRoute(route))
+      dispatch(fetchSelectedRouteProviders(route.routeProviders))
+    }
   }
   return (
     <>

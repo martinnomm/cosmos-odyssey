@@ -1,15 +1,17 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { selectSelectedRoute } from "../redux/reducers"
-import { removeSelectedRoute } from "../redux/reducers/selectedRoute"
+import { selectSelectedRoute, selectSelectedRouteProviders } from "../redux/reducers"
+import { removeSelectedRoute, removeSelectedRouteProviders } from "../redux/reducers/selectedRoute"
 import { hideLoader, showLoader } from "../redux/reducers/showLoaderOverlay"
 import InputName from "./InputName"
 import ProvidedRoutesDisplay from "./ProvidedRoutesDisplay"
+import ProvidersList from "./ProvidersList"
 import './SideBar.scss'
 
 export default function SideBar() {
     const dispatch = useDispatch()
     const selectedRoute = useSelector(selectSelectedRoute)
+    const selectedRouteProviders = useSelector(selectSelectedRouteProviders)
     
     const [firstName, setFirstName] = useState('')
     const [lastName, setLastName] = useState('')
@@ -22,12 +24,14 @@ export default function SideBar() {
     // DONE: Show input for first and last name
     // DONE: When input is clicked, check if both names exist, and if yes, do a post to database
     // DONE: Show route data like in route display
-    // TODO: Create separate element for displaying all providers and their data
- 
+    // DONE: Create separate element for displaying all providers and their data
+    // TODO: Remove comments etc
+    // TODO: Create content for sidebar separate
 
 
     function handleExit() {
         dispatch(removeSelectedRoute())
+        dispatch(removeSelectedRouteProviders())
         setFirstName("")
         setLastName("")
     }
@@ -35,8 +39,6 @@ export default function SideBar() {
 
 
     function handleReservationSubmit() {
-        // if(!firstName) setFirstNameError(true)
-        // if(!lastName) setLastNameError(true)
         if(!firstName || !lastName || !selectedRoute) return
         dispatch(showLoader())
         fetch("http://localhost:3001/api/reservation", { 
@@ -58,7 +60,7 @@ export default function SideBar() {
     }
     return (
         <>
-        <div className={selectedRoute !== null ? "offcanvas offcanvas-start w-25 show" : "offcanvas offcanvas-start w-25"} id="offcanvas">
+        <div className={selectedRoute !== null && selectedRouteProviders !== null ? "offcanvas offcanvas-start w-25 show" : "offcanvas offcanvas-start w-25"} id="offcanvas">
             <div className="offcanvas-header text-black">
                 <h4 className="offcanvas-title d-none d-sm-block" id="offcanvas"><strong>Route details:</strong></h4>
                 <button type="button" className="btn-close text-reset" onClick={handleExit} aria-label="Close"></button>
@@ -85,9 +87,8 @@ export default function SideBar() {
 
                 <div className="divider"></div>
                 <h5 className="px-2">Route Providers:</h5>
-                
+                <ProvidersList providers={selectedRouteProviders} />
                 {/*
-                // TODO: Add list here of all the providers for currently selected route
                     Bring out specific providers and their information
                  */}
 
