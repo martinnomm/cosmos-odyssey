@@ -16,7 +16,6 @@ export default function BuyTicketPage() {
   const loading = useSelector(selectRoutesLoading)
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
-  const providedRoutes = useSelector(selectProvidedRoutes)
   const validUntil = useSelector(selectValidUntil)
   const dispatch = useDispatch()
 
@@ -28,7 +27,6 @@ export default function BuyTicketPage() {
   },[origin,destination])
 
   useEffect(() => {
-    console.log(`Now: ${Date.now()}, valid: ${validUntil} ... ${validUntil-Date.now()}`)
     const fetchTimeout = setTimeout(() => {
       if (planets.includes(origin) && planets.includes(destination))
         dispatch(fetchRoutes({origin, destination}))
@@ -42,7 +40,7 @@ export default function BuyTicketPage() {
   return (
     <>
       <OriginDestinationSelector />
-      <ProvidedRoutesList loading={loading} providedRoutes={providedRoutes} />
+      <ProvidedRoutesList loading={loading}/>
     </>
   )
 }
