@@ -5,3 +5,20 @@
   border-radius: 1rem;
   padding: 0.5rem;
 }
+
+.path-text {
+  span:nth-child(even) {
+    color: gray;
+  }
+  span:nth-child(odd) {
+    font-size: 75%;
+  }
+  span:first-of-type {
+    color: var(--var-accent-color);
+    font-size: 100%;
+  }
+  span:last-of-type {
+    color: var(--var-accent-color);
+    font-size: 100%;
+  }
+}

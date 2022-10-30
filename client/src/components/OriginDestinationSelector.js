@@ -23,10 +23,19 @@ export default function TravelRoute(props) {
     { value: 'SpaceX', label: 'SpaceX' },
     { value: 'Space Odyssey', label: 'Space Odyssey' },
   ]
+  const sortingOptions = [
+    { value: '', label: '-- Select Sorting --' },
+    { value: 'priceAsc', label: 'priceAsc' },
+    { value: 'priceDesc', label: 'priceDesc' },
+    { value: 'distanceAsc', label: 'distanceAsc' },
+    { value: 'distanceDesc', label: 'distanceDesc' },
+    { value: 'travelTimeAsc', label: 'travelTimeAsc' },
+    { value: 'travelTimeDesc', label: 'travelTimeDesc' },
+  ]
   const dispatch = useDispatch()
   const handleOriginChange = (event) => { dispatch(changeOrigin(event.target.value)) } 
   const handleDestinationChange = (event) => { dispatch(changeDestination(event.target.value)) } 
-  const handleSortingChange = (event) => { dispatch(changeSorting(event.target.value)) } 
+  const handleSortingChange = (event) => { dispatch(changeSorting(event.value )) } 
   const handleFilteringChange = (event) => { dispatch(changeFiltering(event))} 
   return (
     <div className='select-container'>
@@ -56,19 +65,23 @@ export default function TravelRoute(props) {
             className="basic-multi-select"
             classNamePrefix="select"
             id="filtering-type"
+            menuPortalTarget={document.body} 
+            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), option: (styles) => {return {...styles, color: 'black'}} }}
           />  
         </div>
         <div className='col-12 my-3'>
           <label htmlFor='sorting-type'>Sorting</label>
-          <select value={sorting} onChange={handleSortingChange} name='sorting-type' id='sorting-type' className='form-select'>
-            <option disabled value=''> -- Select Sorting -- </option>
-            <option value='priceAsc'>Price Ascending</option>
-            <option value='priceDesc'>Price Descending</option>
-            <option value='distanceAsc'>Distance Ascending</option>
-            <option value='distanceDesc'>Distance Descending</option>
-            <option value='travelTimeAsc'>Travel Time Ascending</option>
-            <option value='travelTimeDesc'>Travel Time Descending</option>
-          </select>
+          <Select
+            value={{value: sorting, label: sorting}}
+            onChange={handleSortingChange}
+            name="filtering-type"
+            options={sortingOptions}
+            className="basic-single"
+            classNamePrefix="select"
+            id="filtering-type"
+            menuPortalTarget={document.body} 
+            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), option: (styles) => {return { ...styles, color: 'black'}} }}
+          />
         </div>
       </div>
     </div>

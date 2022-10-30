@@ -136,7 +136,7 @@ function isRoutelistValid() {
           })
           
         })
-        .catch((e) => {res.status(400).json({valid: false, error: e})})
+        .catch((e) => {reject({valid: false, error: e})})
       })
   })
 }

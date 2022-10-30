@@ -15,7 +15,10 @@ export const providedRoutesSlice = createSlice({
             state.routes = action.payload.data
             state.validUntil = action.payload.validUntil
         })
-        builder.addCase(fetchRoutes.rejected, state => { state.loading = false})
+        builder.addCase(fetchRoutes.rejected, state => { 
+            state.loading = false
+            state.routes = []
+        })
     }
 })
 
