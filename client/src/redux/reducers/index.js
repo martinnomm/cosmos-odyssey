@@ -7,9 +7,10 @@ import selectedRoute from './selectedRoute'
 import showLoaderOverlay from './showLoaderOverlay'
 import reservations from './reservations'
 import sorting from './sorting'
+import filtering from './filtering'
 import { combineReducers } from '@reduxjs/toolkit'
 
-export default combineReducers({ providedRoutes, origin, destination, selectedRoute, showLoaderOverlay, reservations, sorting})
+export default combineReducers({ providedRoutes, origin, destination, selectedRoute, showLoaderOverlay, reservations, sorting, filtering})
 
 // Export select commands for the reducers
  
@@ -22,6 +23,7 @@ const selectProvidedRoutes = state => state.providedRoutes.routes
 const selectReservations = state => state.reservations.reservations
 const selectSelectedRoute = state => state.selectedRoute.routeInfo
 const selectSorting = state => state.sorting.sorting
+const selectFiltering = state => state.filtering.filtering
 const selectShowLoaderOverlay = state => state.providedRoutes.loading || state.reservations.loading || state.showLoaderOverlay.showLoaderOverlay
 
-export { selectRoutesLoading, selectValidUntil, selectOrigin, selectDestination, selectProvidedRoutes, selectSelectedRoute, selectShowLoaderOverlay, selectReservationsLoading, selectReservations, selectSorting }
+export { selectRoutesLoading, selectValidUntil, selectOrigin, selectDestination, selectProvidedRoutes, selectSelectedRoute, selectShowLoaderOverlay, selectReservationsLoading, selectReservations, selectSorting, selectFiltering }

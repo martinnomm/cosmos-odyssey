@@ -1,22 +1,33 @@
 import React from 'react'
+import Select from 'react-select';
 import './OriginDestinationSelector.scss'
-import { selectOrigin, selectDestination, selectSorting } from '../redux/reducers'
+import { selectOrigin, selectDestination, selectSorting, selectFiltering } from '../redux/reducers'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeOrigin } from '../redux/reducers/origin'
 import { changeDestination } from '../redux/reducers/destination'
 import { changeSorting } from '../redux/reducers/sorting'
-
+import { changeFiltering } from '../redux/reducers/filtering'
 export default function TravelRoute(props) {
   const planets = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
 
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
   const sorting = useSelector(selectSorting)
-
+  const filtering = useSelector(selectFiltering)
+  const companies = [
+    { value: 'Explore Origin', label: 'Explore Origin' },
+    { value: 'Spacelux', label: 'Spacelux' },
+    { value: 'Travel Nova', label: 'Travel Nova' },
+    { value: 'Galaxy Express', label: 'Galaxy Express' },
+    { value: 'Space Piper', label: 'Space Piper' },
+    { value: 'SpaceX', label: 'SpaceX' },
+    { value: 'Space Odyssey', label: 'Space Odyssey' },
+  ]
   const dispatch = useDispatch()
   const handleOriginChange = (event) => { dispatch(changeOrigin(event.target.value)) } 
   const handleDestinationChange = (event) => { dispatch(changeDestination(event.target.value)) } 
   const handleSortingChange = (event) => { dispatch(changeSorting(event.target.value)) } 
+  const handleFilteringChange = (event) => { dispatch(changeFiltering(event))} 
   return (
     <div className='select-container'>
       <div className='row'>
@@ -35,7 +46,17 @@ export default function TravelRoute(props) {
           </select>
         </div>
         <div className='col-12 my-3'>
-          Filtering
+          <label htmlFor='filtering-type'>Filter out companies</label>
+          <Select
+            value={filtering}
+            onChange={handleFilteringChange}
+            isMulti
+            name="filtering-type"
+            options={companies}
+            className="basic-multi-select"
+            classNamePrefix="select"
+            id="filtering-type"
+          />  
         </div>
         <div className='col-12 my-3'>
           <label htmlFor='sorting-type'>Sorting</label>

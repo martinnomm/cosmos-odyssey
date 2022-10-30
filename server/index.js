@@ -11,7 +11,6 @@ const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(cors())
- // TODO: All API should respond with validuntil if it's current
 const routes = [
   ['Earth','Jupiter'],
   ['Earth','Uranus'],
@@ -76,7 +75,6 @@ function recursiveValidRoutes(pathRef, legs, providers, currentPlanetIDX = 0, cu
   const currentProviders = providers.filter(provider => provider.leg_id === currentLeg.id)
   const nextRoutes = []
   for (let i = 0; i < currentProviders.length; i++) {
-      // TODO: Add filter for companies here
       const provider = currentProviders[i]
       const flightStart = new Date(provider.flight_start).getTime()
       if (previousFlightEnd > flightStart) continue

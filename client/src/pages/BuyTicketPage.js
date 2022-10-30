@@ -3,7 +3,7 @@ import './BuyTicketPage.scss'
 import ProvidedRoutesList from '../components/ProvidedRoutesList.js'
 import OriginDestinationSelector from '../components/OriginDestinationSelector.js'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectRoutesLoading, selectOrigin, selectDestination, selectProvidedRoutes, selectValidUntil } from '../redux/reducers'
+import { selectRoutesLoading, selectOrigin, selectDestination, selectValidUntil } from '../redux/reducers'
 import { fetchRoutes } from '../redux/reducers/providedRoutes'
 
 export default function BuyTicketPage() {

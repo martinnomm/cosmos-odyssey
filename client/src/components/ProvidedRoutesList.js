@@ -2,12 +2,13 @@ import React from 'react'
 import './ProvidedRoutesList.scss'
 import ProvidedRoutesDisplay from './ProvidedRoutesDisplay.js'
 import { useSelector } from 'react-redux'
-import { selectProvidedRoutes, selectSorting } from '../redux/reducers'
+import { selectFiltering, selectProvidedRoutes, selectSorting } from '../redux/reducers'
 
 // TODO: "load max 50 tickets a pop, scrolling loads more type pagination "
 export default function ProvidedRoutesList(props) {
 
   const sorting = useSelector(selectSorting)
+  const filtering = useSelector(selectFiltering)
   const providedRoutes = useSelector(selectProvidedRoutes)
   function getSortedFunc(sort_type) {
     switch (sort_type) {
@@ -33,8 +34,9 @@ export default function ProvidedRoutesList(props) {
       <div className='provided-routes-list'>
         <div className='provided-list-header'/>
         {
-            [].concat(providedRoutes)
+            [].concat(providedRoutes) // TODO: Move sorting / filtering to backend?
             .sort(getSortedFunc(sorting))
+            .filter((providedRoute) => providedRoute.companies.every((company) => !filtering.map(filter => filter.value).includes(company)))
             .map((providedRoute, idx) => { return <ProvidedRoutesDisplay  route={providedRoute} key={idx}/> })
         }
         <div className='provided-list-footer'/>
