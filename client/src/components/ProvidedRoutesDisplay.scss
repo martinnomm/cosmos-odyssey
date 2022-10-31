@@ -1,24 +1,33 @@
 .provided-route {
   margin: auto;
-  background-color: black;
+  background-color: var(--var-darker-bg-color);
   margin: 1rem;
-  border-radius: 1rem;
-  padding: 0.5rem;
+  border-radius: 1rem 5rem;
+  padding: 1rem;
+  padding-left: 4rem;
+
+  p span, h5 span {
+    color: var(--var-light-accent-color);
+  }
+}
+.display-divider {
+  background-color: var(--var-light-accent-color) !important;
 }
 
 .path-text {
   span:nth-child(even) {
-    color: gray;
+    color: lightgray;
   }
   span:nth-child(odd) {
     font-size: 75%;
+    color: lightgray;
   }
   span:first-of-type {
-    color: var(--var-accent-color);
+    color: var(--var-light-accent-color);
     font-size: 100%;
   }
   span:last-of-type {
-    color: var(--var-accent-color);
+    color: var(--var-light-accent-color);
     font-size: 100%;
   }
 }

@@ -6,7 +6,7 @@ export const providedRoutesSlice = createSlice({
     initialState: {
         loading: false,
         routes: [],
-        validUntil: Date.now(),
+        validUntil: 0,
     },
     extraReducers: (builder) => {
         builder.addCase(fetchRoutes.pending, state => {state.loading = true})

@@ -1,23 +1,6 @@
-.provided-routes-container {
-  position: relative;
-  margin: auto;
-}
-
 .provided-routes-list {
-  position: relative;
-  top: 50%;
-  width: 40%;
-  margin: auto;
-  background-color: rgba(1,66,83,255);
-  padding: 1rem;
-  border-radius: 0.5rem;
+  margin-top: 2rem;
   display: flex;
   flex-direction: column;
   overflow-y: scroll;
-  height: 75vh;
-}
-
-.provided-list-header {
-  background-color: rgba(255,66,83,255);
-  width: 100%;
 }

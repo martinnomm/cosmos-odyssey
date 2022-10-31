@@ -4,7 +4,8 @@ import ProvidedRoutesDisplay from './ProvidedRoutesDisplay.js'
 import { useSelector } from 'react-redux'
 import { selectFiltering, selectProvidedRoutes, selectSorting } from '../redux/reducers'
 
-// TODO: "load max 50 tickets a pop, scrolling loads more type pagination "
+// TODO: pagination
+// TODO: Move sorting / filtering to backend?
 export default function ProvidedRoutesList(props) {
 
   const sorting = useSelector(selectSorting)
@@ -30,20 +31,16 @@ export default function ProvidedRoutesList(props) {
   }
   
   return (
-    <div className='provided-routes-container'>
-      <div className='provided-routes-list'>
-        <div className='provided-list-header'/>
-        {
-          providedRoutes && providedRoutes?.length > 0 ?
-            [].concat(providedRoutes) // TODO: Move sorting / filtering to backend?
-            .sort(getSortedFunc(sorting))
-            .filter((providedRoute) => providedRoute.companies.every((company) => !filtering.map(filter => filter.value).includes(company)))
-            .map((providedRoute, idx) => { return <ProvidedRoutesDisplay  route={providedRoute} key={idx}/> })
-            :
-          <ProvidedRoutesDisplay/>
-        }
-        <div className='provided-list-footer'/>
-      </div>
+    <div className='provided-routes-list'>
+      {
+        providedRoutes && providedRoutes?.length > 0 ?
+          [].concat(providedRoutes) 
+          .sort(getSortedFunc(sorting))
+          .filter((providedRoute) => providedRoute.companies.every((company) => !filtering.map(filter => filter.value).includes(company)))
+          .map((providedRoute, idx) => { return <ProvidedRoutesDisplay selectable={true}  route={providedRoute} key={idx}/> })
+          :
+        <ProvidedRoutesDisplay selectable={false}/>
+      }
     </div>
   )
 }

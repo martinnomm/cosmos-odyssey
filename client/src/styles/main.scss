@@ -1,52 +1,57 @@
+@import './starsBackground.scss';
+
 :root {
-  --var-accent-color: #c3c3ff;
+  // --var-accent-color: #c3c3ff; old
+  // --var-accent-color: #430d4b;
+  // --var-accent-color: #c874b2;
+  --var-darker-bg-color: #030a2b;
+  --var-dark-bg-color: #081448;
+  --var-light-text-color: white;
+  --var-mid-dark-bg-color: #282157;
+  --var-light-accent-color: #9490e7;
+  --var-accent-color: #4a478a;
+  // --var-dark-bg-color: #210535;
+  // --var-light-text-color: white;
+  // --var-mid-dark-bg-color: #7b337d;
+  // --var-accent-color: #f5d5e0;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-}
 body {
   overflow: hidden;
-  overflow-x: none;
 }
-body {
-    background-color: rgba(36,83,103,255);
-    color: white;
-}
-
-@keyframes move-twinkling-back {
-  from {background-position: 0 0;}
-  to {background-position: -10000px 5000px;}
-}
-
-.stars, .twinkling {
-  position: absolute;
+.page-container {
+  overflow-y: hidden;
+  position: relative;
+  display:flex;
+  flex-direction: column;
+  height: 100vh;
   top: 0;
-  left: 0;
   bottom: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
-  user-select: none;
+  margin: auto;
+  background: var(--var-dark-bg-color);
+  z-index:3;
+  max-width:900px;
+  color: var(--var-light-text-color);
+  * {
+    z-index:3;
+    color: var(--var-light-text-color);
+  }
 }
-
-.stars {
-  background: #000 url(../assets/img/stars.png) repeat top center;
-  z-index: 0;
-}
-.twinkling {
-  background: transparent url(../assets/img/twinkling.png) repeat top center;
-  z-index: 1;
-  animation: move-twinkling-back 200s linear infinite;
-}
-
-.some-routing-template {
-  position: absolute;
+.routing-section {
   display: flex;
   justify-content: center;
   justify-items: center;
-  color: red;
-  z-index: 4;
+  a {
+    padding: 1rem;
+    background: var(--var-mid-dark-bg-color);
+    border-radius: 1rem;
+    font-weight: bold;
+    margin: 1rem;
+  }
+  a:hover {
+    color: var(--var-light-text-color);
+  }
+  a.active {
+    color: var(--var-light-accent-color)
+  }
 }

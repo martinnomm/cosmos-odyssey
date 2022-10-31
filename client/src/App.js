@@ -1,25 +1,26 @@
 import React from 'react'
 import BuyTicketPage from './pages/BuyTicketPage'
 import CheckTicketPage from './pages/CheckTicketPage'
-import SideBar from './components/SideBar'
-import { Routes, Route, Link } from 'react-router-dom'
+import SideBarContainer from './components/SideBarContainer'
+import { Routes, Route, NavLink } from 'react-router-dom'
 import LoaderOverlay from './components/LoaderOverlay'
 
 function App() {
-  // TODO: FIX HEADER FOR SELECTING TICKET OR 
   return (
     <>
-    <div className='stars'/>
-    <div className='twinkling'/>
-    <div className='some-routing-template'> 
-      <Link to='/'>Buy Ticket</Link>
-      <Link to='/check-ticket'>Check Ticket</Link>
+    <div className='stars d-none d-md-block'/>
+    <div className='twinkling d-none d-md-block'/>
+    <div className='page-container container'>
+      <div className='routing-section'> 
+        <NavLink to='/' end>Buy Ticket</NavLink>
+        <NavLink to='/check-ticket' exact={"true"}>Check Tickets</NavLink>
+      </div>
+      <Routes>
+        <Route path='/' element={ <BuyTicketPage/> } />
+        <Route path='/check-ticket' element={ <CheckTicketPage/> } />
+      </Routes>
     </div>
-    <Routes>
-      <Route path='/' element={ <BuyTicketPage/> } />
-      <Route path='/check-ticket' element={ <CheckTicketPage/> } />
-    </Routes>
-    <SideBar />
+    <SideBarContainer />
     <LoaderOverlay />
     </>
   )

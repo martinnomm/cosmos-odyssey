@@ -11,8 +11,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
       console.log('Connected to the SQLite database.')
       db.run(
         `CREATE TABLE IF NOT EXISTS routelist (
-          asd INTEGER PRIMARY KEY AUTOINCREMENT,
-          id TEXT,
+          id TEXT PRIMARY KEY,
           valid_until TEXT
         )`
       )
@@ -57,6 +56,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
           id TEXT PRIMARY KEY,
           reservation_id TEXT,
           provider_id TEXT,
+          route_order INTEGER,
           FOREIGN KEY (reservation_id) REFERENCES reservation(id) ON DELETE CASCADE
         )`
       )

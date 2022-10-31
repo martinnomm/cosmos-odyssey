@@ -1,15 +1,20 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Select from 'react-select';
-import './OriginDestinationSelector.scss'
 import { selectOrigin, selectDestination, selectSorting, selectFiltering } from '../redux/reducers'
 import { useDispatch, useSelector } from 'react-redux'
 import { changeOrigin } from '../redux/reducers/origin'
 import { changeDestination } from '../redux/reducers/destination'
 import { changeSorting } from '../redux/reducers/sorting'
 import { changeFiltering } from '../redux/reducers/filtering'
-export default function TravelRoute(props) {
+import { BsCaretUp, BsCaretDown } from 'react-icons/bs'
+import { IconContext } from 'react-icons/lib';
+import './OriginDestinationSelector.scss'
+export default function OriginDestinationSelector(props) {
   const planets = [ "Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune" ]
 
+  const [menuFolded, setMenuFolded] = useState(false)
+  const foldMenu = () => { setMenuFolded(true)} 
+  const unFoldMenu = () => { setMenuFolded(false)} 
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
   const sorting = useSelector(selectSorting)
@@ -38,18 +43,18 @@ export default function TravelRoute(props) {
   const handleSortingChange = (event) => { dispatch(changeSorting(event.value )) } 
   const handleFilteringChange = (event) => { dispatch(changeFiltering(event))} 
   return (
-    <div className='select-container'>
-      <div className='row'>
+    <div>
+      <div className={menuFolded ? 'row select-container hidden' : 'row select-container'}>
         <div className='col-12 col-md-6 my-3'>
           <label htmlFor='travel-origin'>Origin</label>
-          <select value={origin} onChange={handleOriginChange} name='travel-origin' id='travel-origin' className='form-select'>
+          <select disabled={menuFolded} value={origin} onChange={handleOriginChange} name='travel-origin' id='travel-origin' className='form-select text-black'>
             <option disabled value=''>-- Select an option --</option>
             { planets.map( (planet, i) => { return (<option key={i} disabled={planet === destination}>{planet}</option>)})}
           </select>
         </div>
         <div className='col-12 col-md-6 my-3'>
           <label htmlFor='travel-destination'>Destination</label>
-          <select value={destination} onChange={handleDestinationChange} name='travel-destination' id='travel-destination' className='form-select'>
+          <select disabled={menuFolded} value={destination} onChange={handleDestinationChange} name='travel-destination' id='travel-destination' className='form-select text-black'>
             <option disabled value=''> -- Select an option -- </option>
             { planets.map( (planet, i) => { return (<option key={i} disabled={planet === origin}>{planet}</option>)})}
           </select>
@@ -65,6 +70,7 @@ export default function TravelRoute(props) {
             className="basic-multi-select"
             classNamePrefix="select"
             id="filtering-type"
+            isDisabled={menuFolded}
             menuPortalTarget={document.body} 
             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), option: (styles) => {return {...styles, color: 'black'}} }}
           />  
@@ -79,10 +85,19 @@ export default function TravelRoute(props) {
             className="basic-single"
             classNamePrefix="select"
             id="filtering-type"
+            isDisabled={menuFolded}
             menuPortalTarget={document.body} 
             styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }), option: (styles) => {return { ...styles, color: 'black'}} }}
           />
         </div>
+      </div>
+      <div className='row'>
+        {
+          menuFolded ?
+            <IconContext.Provider value={{ className: 'fold-icon'}}><BsCaretDown onClick={unFoldMenu} /></IconContext.Provider>
+            : <IconContext.Provider value={{ className: 'fold-icon'}}><BsCaretUp onClick={foldMenu} /></IconContext.Provider>
+        }
+        
       </div>
     </div>
   )

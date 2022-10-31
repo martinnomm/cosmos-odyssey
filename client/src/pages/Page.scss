@@ -1,0 +1,21 @@
+.page-row {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding-left: 2rem;
+    padding-right: 2rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    border-radius: 1rem;
+    background: var(--var-mid-dark-bg-color);
+    overflow: none;
+}
+.fold-icon {
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+}
+.buy-page {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}

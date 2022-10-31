@@ -7,6 +7,11 @@ export const reservationsSlice = createSlice({
         loading: false,
         reservations: [],
     },
+    reducers: {
+        removeReservations: (state, action) => {
+            state.reservations = []
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchReservations.pending, state => {state.loading = true})
         builder.addCase(fetchReservations.fulfilled, (state, action) => {
@@ -20,5 +25,7 @@ export const reservationsSlice = createSlice({
 const fetchReservations = createAsyncThunk('reservations/fetchReservations', 
     async (payload) => fetch(`http://localhost:3001/api/reservation?firstname=${payload.firstName}&lastname=${payload.lastName}`).then(res => res.json())
 )
+
+export const { removeReservations } = reservationsSlice.actions
 export { fetchReservations }
 export default reservationsSlice.reducer
