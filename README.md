@@ -42,3 +42,5 @@ Here you can check previously reserved tickets. Entering first and last name wil
 The reservations can also be clicked on to open more detailed information about them in the sidebar.
 
 The App will only keep the last 15 provided routelists in memory. When a new routelist is acquired, the oldest routelist will be deleted from the database. This included all the information related to that routelist and the reservations made for that routelist.
+
+Currently the app loads more routelists only when front-end is open to query for them.
