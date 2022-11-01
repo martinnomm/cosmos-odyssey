@@ -1,70 +1,44 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Cosmos Odyssey Planet Routing APP
 
-## Available Scripts
+This project uses the Cosmos Odyssey API for planetary routes to offer the client tickets between the planets and stores the reserved tickets in the database.
+The project consists of an Express JS server back-end and React client front-end.
 
-In the project directory, you can run:
+The API url for the project is https://cosmos-odyssey.azurewebsites.net/api/v1.0/TravelPrices
 
-### `npm start`
+<b>To start testing the project, open 2 command terminals.
+One for the server and the other for client.</b>
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### <b>Server terminal</b>
+Navigate terminal to the server directory.
+Install required packages with `npm install` command.
+Launch the server with `nodemon` command.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The server should now be running and on port 3001 on localhost.
 
-### `npm test`
+### <b>Client terminal</b>
+Navigate terminal to the client directory.
+Install required packages with `npm install` command.
+Launch the dev client with `npm run start` command.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This launches the client on localhost:3000 
 
-### `npm run build`
+Navigating to http://localhost:3000 will open the application.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The application has 2 main routes. 
+One for buying tickets and the other for Checking previously reserved tickets.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Buy Page
+Here you can enter origin planet and destination planet. Based on that the app will query according available routes to you.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+The routes can also be sorted according to price, distance and travel time.
 
-### `npm run eject`
+The routes can also be filtered according to the companies carrying out the routes.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Clicking on a route will open the route and its providers on the sidebar. There you can enter first and last name to make a reservation for the ticket.
+## Check Ticket Page
+Here you can check previously reserved tickets. Entering first and last name will query for reservations.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The reservations can also be clicked on to open more detailed information about them in the sidebar.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+The App will only keep the last 15 provided routelists in memory. When a new routelist is acquired, the oldest routelist will be deleted from the database. This included all the information related to that routelist and the reservations made for that routelist.
