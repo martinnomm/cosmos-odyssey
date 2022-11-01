@@ -1,5 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
+/**
+ * Saves Currently selected route from the route ticket buy page to display on sidebar
+ */
 export const selectedRouteSlice = createSlice({
     name: 'selectedRoute',
     initialState: {
@@ -37,7 +40,7 @@ export const selectedRouteSlice = createSlice({
 
 
 const fetchSelectedRouteProviders = createAsyncThunk('selectedRoute/fetchSelectedRouteProviders', 
-    async (payload) => fetch(`http://localhost:3001/api/provider?${payload.map(providerID=>`providerids[]=${providerID}`).join('&')}`).then(res => res.json())
+    async (payload) => fetch(`http://localhost:3001/api/provider?${payload.map(providerID=>`providerids[]=${providerID}`, {mode:'cors'}).join('&')}`).then(res => res.json())
 )
 
 

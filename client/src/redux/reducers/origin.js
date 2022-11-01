@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+/**
+ * Saves origin for picking routes to buy ticket
+ */
 export const originSlice = createSlice({
     name: 'origin',
     initialState: {

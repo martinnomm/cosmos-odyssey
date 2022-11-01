@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+
+/**
+ * Onscreen loader when fetching for content
+ */
 export const showLoaderOverlaySlice = createSlice({
     name: 'showLoaderOverlay',
     initialState: {

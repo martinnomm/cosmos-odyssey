@@ -1,4 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
+
+/**
+ * Sorting variables for routes on buy page
+ */
 export const sortingSlice = createSlice({
     name: 'sorting',
     initialState: {

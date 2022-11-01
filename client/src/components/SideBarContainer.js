@@ -37,6 +37,7 @@ export default function SideBarContainer() {
         fetch("http://localhost:3001/api/reservation", { 
             method: "POST",
             headers: {'Content-Type': 'application/json'},
+            mode: 'cors',
             body: JSON.stringify({'firstName': firstName, 'lastName':lastName, reservedRoute: selectedRoute}), 
         })
         .then(() => {
@@ -47,13 +48,12 @@ export default function SideBarContainer() {
         .catch((e) => { 
             dispatch(hideLoader())
             // Give server error text TODO: toastr
-            console.error(e)
             handleExit()
         })
     }
     return (
         <>
-        <div className={selectedRoute !== null && selectedRouteProviders !== null ? "offcanvas offcanvas-start w-25 show sidebar-container" : "offcanvas offcanvas-start w-25 sidebar-container"} id="offcanvas">
+        <div className={selectedRoute !== null && selectedRouteProviders !== null ? "offcanvas offcanvas-start show sidebar-container" : "offcanvas offcanvas-start sidebar-container"} id="offcanvas">
             <div className="offcanvas-header">
                 <h4 className="offcanvas-title d-none d-sm-block" id="offcanvas"><strong>Route details:</strong></h4>
                 <button type="button" className="btn-close text-reset" onClick={handleExit} aria-label="Close"></button>

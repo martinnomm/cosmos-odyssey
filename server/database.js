@@ -60,8 +60,7 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
           FOREIGN KEY (reservation_id) REFERENCES reservation(id) ON DELETE CASCADE
         )`
       )
+      db.run("PRAGMA foreign_keys=ON")
   }
-});
-
-
+})
 module.exports = db

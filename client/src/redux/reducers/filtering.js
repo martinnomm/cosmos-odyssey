@@ -1,4 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+/**
+ * Filtering array to filter out companies from route query
+ */
 export const filteringSlice = createSlice({
     name: 'filtering',
     initialState: {

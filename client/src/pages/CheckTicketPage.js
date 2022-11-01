@@ -6,12 +6,15 @@ import { selectReservations, selectReservationsLoading } from '../redux/reducers
 import { fetchReservations } from '../redux/reducers/reservations'
 import './Page.scss'
 
+/**
+ * Router link page for selecting first and last name to query for previously made reservations and display them
+ * @returns Router Link Check Ticket Page
+ */
 export default function CheckTicketPage() {
 
   const dispatch = useDispatch()
   const reservations = useSelector(selectReservations)
   const loading = useSelector(selectReservationsLoading)
-
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('') 
 

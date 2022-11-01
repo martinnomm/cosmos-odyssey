@@ -9,3 +9,9 @@
     --bs-offcanvas-bg: var(--var-accent-color) !important;
     color: var(--var-light-text-color) !important;
 }
+
+@media (max-width: 768px) {
+    .sidebar-container {
+        width: 100vw !important;
+    }
+}

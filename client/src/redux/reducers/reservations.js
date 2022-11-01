@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
+/**
+ * Saves reservations data when checking for tickets
+ */
 export const reservationsSlice = createSlice({
     name: 'reservations',
     initialState: {
@@ -23,7 +25,7 @@ export const reservationsSlice = createSlice({
 })
 
 const fetchReservations = createAsyncThunk('reservations/fetchReservations', 
-    async (payload) => fetch(`http://localhost:3001/api/reservation?firstname=${payload.firstName}&lastname=${payload.lastName}`).then(res => res.json())
+    async (payload) => fetch(`http://localhost:3001/api/reservation?firstname=${payload.firstName}&lastname=${payload.lastName}`, {mode:'cors'}).then(res => res.json())
 )
 
 export const { removeReservations } = reservationsSlice.actions
